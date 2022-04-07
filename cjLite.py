@@ -17,6 +17,7 @@ import funforhelp as ffp
 from cjLiteSubWinTab import Ui_ConstTab
 from cjLiteSubWinParam import Ui_Param
 from cjLiteSubWinVinP import Ui_VinP
+from cjLiteSubWinPlSt import Ui_PlSt
 
 import platform
 
@@ -139,8 +140,6 @@ class Ui_MainWindow(object):
         self.actionParam.setObjectName('actionParam')
         self.actionPlotSet = QtWidgets.QAction(MainWindow)
         self.actionPlotSet.setObjectName('actionPlotSet')
-        self.actionCastPlot = QtWidgets.QAction(MainWindow)
-        self.actionCastPlot.setObjectName('actionCastPlot')
         self.actionPlot = QtWidgets.QAction( 'actionPlot' )
         self.actionPlot.setObjectName('actionPlot')
         self.menuFile.addAction(self.actionOpen)
@@ -153,7 +152,6 @@ class Ui_MainWindow(object):
         self.menuStart.addAction(self.actionStart)
         self.menuStart.addAction(self.actionParam)
         self.menuPlot.addAction(self.actionPlotSet)
-        self.menuPlot.addAction(self.actionCastPlot)
         self.menuPlot.addAction(self.actionPlot)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuView.menuAction())
@@ -192,7 +190,7 @@ class Ui_MainWindow(object):
 
         self.filename = ''
         self.Window = QtWidgets.QMainWindow()
-        self.currentPT = 'gas diagram'
+        self.currentPT = 'Gas diagram'
         self.startprt = fsa.StartParam()
 
         self.canv = MatplotlibCanvas(self)
@@ -200,7 +198,7 @@ class Ui_MainWindow(object):
         self.toolbar = Navi(self.canv, self.centralwidget)
         self.horizontalLayout.addWidget(self.toolbar)
 
-        self.PlotType = ['gas diagram', 'liquid diagram', 'gas+liquid', '3D plot', 'Dew line']
+        self.PlotType = ['Gas diagram', 'Liquid diagram', 'Gas+Liquid', '3D plot', 'Dew line']
         self.comboBox.addItems(self.PlotType)
         self.comboBox.currentIndexChanged['QString'].connect( self.Update )
 
@@ -221,6 +219,8 @@ class Ui_MainWindow(object):
         self.actionTBParam.triggered.connect( self.openCParamWin )
         self.actionPlot.triggered.connect( self.getPlot )
         self.actionTBPlot.triggered.connect(self.getPlot)
+        self.actionPlotSet.triggered.connect(self.openPPlStWin)
+        self.actionTBPlSet.triggered.connect(self.openPPlStWin)
 
 
 
@@ -427,6 +427,10 @@ class Ui_MainWindow(object):
         print('Finish plot')
         self.lineEdit_3.setText('Finish plot')
 
+    def getCastPlot(self):
+
+        pass
+
     def Update(self, value):
 
         self.currentPT = value
@@ -530,7 +534,15 @@ class Ui_MainWindow(object):
         ui.lineEdit_4.textChanged[str].connect( self.changeP2 )
         self.Window.show()
 
+    def openPPlStWin(self):
 
+        sip.delete(self.Window)
+
+        self.Window = None
+        self.Window = QtWidgets.QMainWindow(self.centralwidget)
+        self.ui = Ui_PlSt()
+        self.ui.setupUi(self.Window)
+        self.Window.show()
 
 ###############################################################################################
 ###############################################################################################
@@ -561,7 +573,6 @@ class Ui_MainWindow(object):
         self.actionTBParam.setText(_translate('MainWindow', 'Calculation settings'))
         self.actionPlotSet.setText(_translate('MainWindow', 'Plot settings'))
         self.actionTBPlSet.setText(_translate('MainWindow', 'Plot setting'))
-        self.actionCastPlot.setText(_translate('MainWindow', 'Castom plot'))
         self.actionPlot.setText(_translate('MainWindow', 'Plot'))
         self.actionTBPlot.setText(_translate('MainWindow', 'Plot'))
 
