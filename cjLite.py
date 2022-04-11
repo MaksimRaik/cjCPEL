@@ -3,21 +3,24 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT as Navi
 from matplotlib.figure import Figure
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+from mpl_toolkits.mplot3d import Axes3D
 matplotlib.use('Qt5Agg')
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets, QtWebEngineWidgets
 from PyQt5.QtWidgets import QFileDialog
-import seaborn as sns
 import sip
 from timeit import *
 import sys
 
+
 #################################
-import functionSA as fsa
+import functionEoS.functionSA as fsa
 import funforhelp as ffp
-from cjLiteSubWinTab import Ui_ConstTab
-from cjLiteSubWinParam import Ui_Param
-from cjLiteSubWinVinP import Ui_VinP
-from cjLiteSubWinPlSt import Ui_PlSt
+from subwindow.cjLiteSubWinTab import Ui_ConstTab
+from subwindow.cjLiteSubWinParam import Ui_Param
+from subwindow.cjLiteSubWinVinP import Ui_VinP
+from subwindow.cjLiteSubWinPlSt import Ui_PlSt
 
 import platform
 
@@ -386,13 +389,14 @@ class Ui_MainWindow(object):
 
             print('YES')
 
-            axes3d = self.canv.fig.add_subplot( 111, projection='3d' )
+            axes3d = self.canv.fig.gca( projection='3d' )
 
             scc = None
 
             PG, PL = np.meshgrid( self.Pg / 1.0e5, self.Pl / 1.0e5 )
 
-            scc = axes3d.plot_surface(PG, PL, self.Sl, np.linspace(np.min(self.Sl), np.max(self.Sl), 15), cmap='BuPu' )
+            scc = axes3d.plot_surface(PG, PL, self.Sl, np.linspace(np.min(self.Sl), np.max(self.Sl), 15), cmap='BuPu',
+                                      linewidth=0, antialiased=False, shade=False)
 
             axes3d.set_xlabel(r'$ P_{gas} $')
             axes3d.set_ylabel(r'$ P_{liq} $')
